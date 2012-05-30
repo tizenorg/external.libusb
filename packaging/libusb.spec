@@ -8,6 +8,7 @@ Group:      System/Libraries
 License:    LGPLv2+
 URL:        http://sourceforge.net/projects/libusb/
 Source0:    http://prdownloads.sourceforge.net/libusb/%{name}-%{version}.tar.gz
+Source1001: packaging/libusb.manifest 
 Patch0:     00_packed.diff
 Patch1:     01_ansi.diff
 Patch2:     02_usbpp.diff
@@ -57,6 +58,7 @@ develop applications that use libusb.
 %patch7 -p1
 
 %build
+cp %{SOURCE1001} .
 
 %configure  \
     --disable-static --disable-build-docs
@@ -82,12 +84,14 @@ ln -sf /lib/libusb-0.1.so.4.4.4 %{buildroot}/usr/lib/libusb.so
 
 
 %files
+%manifest libusb.manifest
 %defattr(-,root,root,-)
 /lib/*.so.*
 %{_libdir}/*.so.*
 
 
 %files devel
+%manifest libusb.manifest
 %defattr(-,root,root,-)
 %{_bindir}/libusb-config
 %{_libdir}/pkgconfig/libusb.pc
