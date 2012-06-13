@@ -1,8 +1,0 @@
-00_packed.diff
-01_ansi.diff
-02_usbpp.diff
-03_const_buffers.diff
-04_infinite_loop.diff
-05_emdebian_libs.diff
-90_am_maintainer_mode.diff
-91_autoreconf.diff
