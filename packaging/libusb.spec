@@ -1,21 +1,14 @@
+#sbs-git:slp/pkgs/xorg/miscs/libusb libusb 0.1.12 5f66398d2ff51aa632e78f28c86ef773ba3002a0
 %define keepstatic 1
 
 Name:       libusb
 Summary:    A library which allows userspace access to USB devices
-Version: 0.1.12
+Version: 1.0.9
 Release:    15
 Group:      System/Libraries
 License:    LGPLv2+
 URL:        http://sourceforge.net/projects/libusb/
 Source0:    http://prdownloads.sourceforge.net/libusb/%{name}-%{version}.tar.gz
-Patch0:     00_packed.diff
-Patch1:     01_ansi.diff
-Patch2:     02_usbpp.diff
-Patch3:     03_const_buffers.diff
-Patch4:     04_infinite_loop.diff
-Patch5:     05_emdebian_libs.diff
-Patch6:     90_am_maintainer_mode.diff
-Patch7:     91_autoreconf.diff
 Requires(post): /sbin/ldconfig
 Requires(postun): /sbin/ldconfig
 
@@ -39,23 +32,6 @@ develop applications that use libusb.
 %prep
 %setup -q -n %{name}-%{version}
 
-# 00_packed.diff
-%patch0 -p1
-# 01_ansi.diff
-%patch1 -p1
-# 02_usbpp.diff
-%patch2 -p1
-# 03_const_buffers.diff
-%patch3 -p1
-# 04_infinite_loop.diff
-%patch4 -p1
-# 05_emdebian_libs.diff
-%patch5 -p1
-# 90_am_maintainer_mode.diff
-%patch6 -p1
-# 91_autoreconf.diff
-%patch7 -p1
-
 %build
 
 %configure  \
@@ -69,9 +45,9 @@ rm -rf %{buildroot}
 
 
 mkdir -p %{buildroot}/lib/
-mv %{buildroot}/usr/lib/libusb-0.1.so.* %{buildroot}/lib/
-ln -sf /lib/libusb-0.1.so.4 %{buildroot}/usr/lib/libusb-0.1.so.4
-ln -sf /lib/libusb-0.1.so.4.4.4 %{buildroot}/usr/lib/libusb.so
+mv %{buildroot}/usr/lib/libusb-1.0.so.* %{buildroot}/lib/
+ln -sf /lib/libusb-1.0.so.0 %{buildroot}/usr/lib/libusb-1.0.so.0
+ln -sf /lib/libusb-1.0.so.0.1.0 %{buildroot}/usr/lib/libusb-1.0.so
 
 
 %post -p /sbin/ldconfig
@@ -89,8 +65,8 @@ ln -sf /lib/libusb-0.1.so.4.4.4 %{buildroot}/usr/lib/libusb.so
 
 %files devel
 %defattr(-,root,root,-)
-%{_bindir}/libusb-config
-%{_libdir}/pkgconfig/libusb.pc
+#%{_bindir}/libusb-config
+%{_libdir}/pkgconfig/libusb-1.0.pc
 %{_includedir}/*
 %{_libdir}/*.so
 
