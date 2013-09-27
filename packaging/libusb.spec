@@ -46,6 +46,9 @@ mv %{buildroot}/usr/lib/libusb-1.0.so.* %{buildroot}/lib/
 ln -sf /lib/libusb-1.0.so.0 %{buildroot}/usr/lib/libusb-1.0.so.0
 ln -sf /lib/libusb-1.0.so.0.1.0 %{buildroot}/usr/lib/libusb-1.0.so
 
+mkdir -p %{buildroot}/usr/share/license
+cp COPYING %{buildroot}/usr/share/license/%{name}
+
 
 %post -p /sbin/ldconfig
 
@@ -58,6 +61,7 @@ ln -sf /lib/libusb-1.0.so.0.1.0 %{buildroot}/usr/lib/libusb-1.0.so
 %defattr(-,root,root,-)
 /lib/*.so.*
 %{_libdir}/*.so.*
+/usr/share/license/%{name}
 
 
 %files devel
