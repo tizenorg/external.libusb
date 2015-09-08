@@ -1,14 +1,12 @@
-#sbs-git:slp/pkgs/xorg/miscs/libusb libusb 0.1.12 5f66398d2ff51aa632e78f28c86ef773ba3002a0
-%define keepstatic 1
-
 Name:       libusb
 Summary:    A library which allows userspace access to USB devices
 Version: 1.0.9
 Release:    15
 Group:      System/Libraries
-License:    LGPLv2+
+License:    LGPL-2.1+
 URL:        http://sourceforge.net/projects/libusb/
 Source0:    http://prdownloads.sourceforge.net/libusb/%{name}-%{version}.tar.gz
+Source1:	libusb.manifest
 Requires(post): /sbin/ldconfig
 Requires(postun): /sbin/ldconfig
 
@@ -33,6 +31,7 @@ develop applications that use libusb.
 %setup -q -n %{name}-%{version}
 
 %build
+cp %{SOURCE1} .
 
 %configure  \
     --disable-static --disable-build-docs
@@ -43,11 +42,12 @@ make %{?jobs:-j%jobs}
 rm -rf %{buildroot}
 %make_install
 
-
 mkdir -p %{buildroot}/lib/
 mv %{buildroot}/usr/lib/libusb-1.0.so.* %{buildroot}/lib/
 ln -sf /lib/libusb-1.0.so.0 %{buildroot}/usr/lib/libusb-1.0.so.0
 ln -sf /lib/libusb-1.0.so.0.1.0 %{buildroot}/usr/lib/libusb-1.0.so
+
+install -D -m 0644 COPYING %{buildroot}/usr/share/license/libusb
 
 
 %post -p /sbin/ldconfig
@@ -61,11 +61,12 @@ ln -sf /lib/libusb-1.0.so.0.1.0 %{buildroot}/usr/lib/libusb-1.0.so
 %defattr(-,root,root,-)
 /lib/*.so.*
 %{_libdir}/*.so.*
+%{_datadir}/license/libusb
 
 
 %files devel
+%manifest libusb.manifest
 %defattr(-,root,root,-)
-#%{_bindir}/libusb-config
 %{_libdir}/pkgconfig/libusb-1.0.pc
 %{_includedir}/*
 %{_libdir}/*.so
