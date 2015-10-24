@@ -1,73 +1,55 @@
-Name:       libusb
-Summary:    A library which allows userspace access to USB devices
-Version: 1.0.9
-Release:    15
-Group:      System/Libraries
-License:    LGPL-2.1+
-URL:        http://sourceforge.net/projects/libusb/
-Source0:    http://prdownloads.sourceforge.net/libusb/%{name}-%{version}.tar.gz
-Source1:	libusb.manifest
-Requires(post): /sbin/ldconfig
-Requires(postun): /sbin/ldconfig
-
+Name:           libusb
+Version:        1.0.9
+Release:        0
+License:        LGPL-2.1+
+Summary:        USB Library
+Url:            http://www.libusb.org/
+Group:          Base/Device Management
+Source:         %{name}-%{version}.tar.bz2
+Source1:        baselibs.conf
+Source1001: 	libusb.manifest
+BuildRequires:  pkg-config
 
 %description
-This package provides a way for applications to access USB devices.
-
+Libusb is a library that allows userspace access to USB devices.
 
 %package devel
-Summary:    Development files for libusb
-Group:      Development/Libraries
-Requires:   %{name} = %{version}-%{release}
+Summary:        USB Library
+Group:          Development/Libraries
+Requires:       glibc-devel
+Requires:       libusb = %{version}
 
 %description devel
-This package contains the header files, libraries  and documentation needed to
-develop applications that use libusb.
-
-
-
+Libusb is a library that allows userspace access to USB devices.
 
 %prep
-%setup -q -n %{name}-%{version}
+%setup -q
+cp %{SOURCE1001} .
 
 %build
-cp %{SOURCE1} .
-
-%configure  \
-    --disable-static --disable-build-docs
-
-make %{?jobs:-j%jobs}
+%configure\
+	--with-pic\
+	--disable-static
+make %{?_smp_mflags}
 
 %install
-rm -rf %{buildroot}
 %make_install
 
-mkdir -p %{buildroot}/lib/
-mv %{buildroot}/usr/lib/libusb-1.0.so.* %{buildroot}/lib/
-ln -sf /lib/libusb-1.0.so.0 %{buildroot}/usr/lib/libusb-1.0.so.0
-ln -sf /lib/libusb-1.0.so.0.1.0 %{buildroot}/usr/lib/libusb-1.0.so
+%post  -p /sbin/ldconfig
 
-install -D -m 0644 COPYING %{buildroot}/usr/share/license/libusb
-
-
-%post -p /sbin/ldconfig
-
-%postun -p /sbin/ldconfig
-
-
-
+%postun  -p /sbin/ldconfig
 
 %files
-%defattr(-,root,root,-)
-/lib/*.so.*
+%manifest %{name}.manifest
+%defattr(-,root,root)
+%doc COPYING
 %{_libdir}/*.so.*
-%{_datadir}/license/libusb
-
 
 %files devel
-%manifest libusb.manifest
-%defattr(-,root,root,-)
-%{_libdir}/pkgconfig/libusb-1.0.pc
-%{_includedir}/*
+%manifest %{name}.manifest
+%defattr(-,root,root)
+%{_includedir}/libusb-1.0
 %{_libdir}/*.so
+%{_libdir}/pkgconfig/*.pc
 
+%changelog
